@@ -18,6 +18,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,6 +65,7 @@ public class Discount implements Serializable {
 	private Date updatedAt;
 	
 	@OneToMany(mappedBy = "discount",cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<Product>products;
 	
 	@PrePersist

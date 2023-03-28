@@ -20,6 +20,10 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,15 +75,19 @@ public class User implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name="role_id")
+	@JsonBackReference
 	private Role role;
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<Order>orders;
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ProductReview> productReviews;
 	
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ShippingAddress> shippingAddresses;
 	
 	@PrePersist

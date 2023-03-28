@@ -19,6 +19,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,13 +65,16 @@ public class Product implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
+	@JsonManagedReference
 	private Brand brand;
 
 	@ManyToMany(mappedBy = "products")
+	@JsonBackReference
 	private List<Category> categories;
 	
 	@ManyToOne
 	@JoinColumn(name = "discount_id")
+	@JsonManagedReference
 	private Discount discount;
 	
 	@PrePersist

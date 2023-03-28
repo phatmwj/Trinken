@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,6 +57,7 @@ public class Brand implements Serializable{
 	private Date updatedAt;
 	
 	@OneToMany(mappedBy ="brand",cascade = CascadeType.ALL )
+	@JsonBackReference
 	private List<Product> product;
 	
 	@PrePersist

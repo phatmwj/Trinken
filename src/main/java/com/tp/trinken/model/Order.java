@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,10 +50,12 @@ public class Order implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "order_status_id")
+	@JsonManagedReference
 	private OrderStatus orderStatus;
 	
 	@ManyToOne()
 	@JoinColumn(name = "customer_id")
+	@JsonManagedReference
 	private User customer;
 	
 	@OneToOne

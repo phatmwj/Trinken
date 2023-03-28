@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,7 @@ public class OrderStatus implements Serializable{
 	private String order_status_name;
 	
 	@OneToMany(mappedBy = "orderStatus",cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<Order>orders;
 
 }

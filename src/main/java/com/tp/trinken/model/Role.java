@@ -14,6 +14,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +45,7 @@ public class Role implements Serializable{
 	private String role_name;
 	
 	@OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<User>users;
 	
 	
