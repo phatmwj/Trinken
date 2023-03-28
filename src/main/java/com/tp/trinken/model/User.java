@@ -67,6 +67,8 @@ public class User implements Serializable{
 	
 	private Date updatedAt;
 	
+	private Date last_login;
+	
 	@ManyToOne
 	@JoinColumn(name="role_id")
 	private Role role;
