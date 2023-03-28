@@ -75,7 +75,7 @@ public class User implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name="role_id")
-	@JsonBackReference
+	@JsonManagedReference
 	private Role role;
 	
 	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
