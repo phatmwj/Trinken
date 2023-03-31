@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public List<Role> findAll() {
-		// TODO Auto-generated method stub
+		
 		return roleRepo.findAll();
 	}
 	

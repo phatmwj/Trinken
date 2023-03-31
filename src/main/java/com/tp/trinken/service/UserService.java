@@ -6,4 +6,6 @@ import com.tp.trinken.model.User;
 
 public interface UserService {
 	List<User> findAll();
+	
+	User login(String username, String password);
 }

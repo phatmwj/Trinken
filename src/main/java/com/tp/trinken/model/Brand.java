@@ -50,7 +50,7 @@ public class Brand implements Serializable{
 	private String image;
 	
 	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	private boolean active;
 	
 	private Date createdAt;
 	

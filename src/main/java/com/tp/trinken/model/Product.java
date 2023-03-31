@@ -12,12 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -49,6 +52,7 @@ public class Product implements Serializable{
 	private String product_name;
 	
 	@NotNull
+	@Min(value = 0)
 	private double price;
 	
 	@Nationalized
@@ -56,8 +60,16 @@ public class Product implements Serializable{
 	
 	private String image;
 	
+	@Min(value = 0)
+	private int quantity;
+	
+	@Min(value = 0)
+	private int sold;
+	
 	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	private boolean active;
+	
+	private Date deleteAt;
 	
 	private Date createdAt;
 	
@@ -76,6 +88,14 @@ public class Product implements Serializable{
 	@JoinColumn(name = "discount_id")
 	@JsonManagedReference
 	private Discount discount;
+	
+	@OneToMany(mappedBy = "product")
+	@JsonBackReference
+	private List<Asset>assets;
+	
+	@OneToMany(mappedBy = "product")
+	@JsonBackReference
+	private List<CartItem> cartItems;
 	
 	@PrePersist
 	void createdAt() {

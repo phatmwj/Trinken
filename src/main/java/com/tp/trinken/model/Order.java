@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -45,8 +47,15 @@ public class Order implements Serializable {
 	@NotNull
 	private double total_amount;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	private Date cancelAt;
+	
+	private Date createdAt;
+	
+	private Date updatedAt;
+	
+	private Date completeAt;
+	
+	private Date deliveryAt;
 	
 	@ManyToOne
 	@JoinColumn(name = "order_status_id")
@@ -61,6 +70,16 @@ public class Order implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "payment_method_id")
 	private PaymentMethod paymentmethod;
+	
+	@PrePersist
+	void createdAt() {
+		this.createdAt = this.updatedAt = new Date();
+	}
+
+	@PreUpdate
+	void updatedAt() {
+		this.updatedAt = new Date();
+	}
 	
 		
 }

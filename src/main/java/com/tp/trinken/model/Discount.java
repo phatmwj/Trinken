@@ -57,25 +57,11 @@ public class Discount implements Serializable {
 	@NotNull
 	private Date end_date;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
-	
-	private Date createdAt;
-	
-	private Date updatedAt;
+	private int status;
 	
 	@OneToMany(mappedBy = "discount",cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Product>products;
 	
-	@PrePersist
-	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
-	}
-
-	@PreUpdate
-	void updatedAt() {
-		this.updatedAt = new Date();
-	}
 
 }

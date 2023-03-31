@@ -17,6 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Nationalized;
 
@@ -46,10 +47,19 @@ public class User implements Serializable{
 	private int user_id;
 	
 	@Column(unique = true,nullable = false)
+	@Size(max = 32)
 	private String user_name;
 	
 	@NotNull
 	private String password;
+	
+	@Nationalized
+	@Size(max = 32)
+	private String first_name;
+	
+	@Nationalized
+	@Size(max = 32)
+	private String last_name;
 	
 	@Column(unique = true, nullable = false)
 	@Nationalized
@@ -65,7 +75,7 @@ public class User implements Serializable{
 	private String image;
 	
 	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	private boolean active;
 	
 	private Date createdAt;
 	

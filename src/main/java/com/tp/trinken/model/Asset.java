@@ -2,25 +2,18 @@ package com.tp.trinken.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Nationalized;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,35 +26,32 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "Categories")
-public class Category implements Serializable {
+@Table(name="Assets")
+public class Asset implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int category_id;
-
-	@Column(unique = true, nullable = false)
-	@Nationalized
-	private String category_name;
-
-	private String image;
+	private int id;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean active;
+	private String path;
+	
+	private String type;
+	
+	private Date deleteAt;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-	@JsonBackReference
-	private List<Product> products;
+	
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	@JsonManagedReference
+	private Product product;
 	
 	@PrePersist
 	void createdAt() {

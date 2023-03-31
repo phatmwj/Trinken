@@ -1,17 +1,20 @@
 package com.tp.trinken.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +27,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Order_Details")
-public class OrderDetail implements Serializable {
+@Table(name="Cart_Items")
+public class CartItem implements Serializable {
 
 	/**
 	 * 
@@ -34,19 +37,31 @@ public class OrderDetail implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int order_detail_id;
+	private int id;
 	
-	@NotNull
-	@Min(value = 1)
+	@Min(value=1)
 	private int quantity;
 	
-	@OneToOne
+	private double price;
+	
+	private Date createdAt;
+	
+	private Date updatedAt;
+	
+	@ManyToOne
 	@JoinColumn(name="product_id")
-	@NotNull
+	@JsonManagedReference
 	private Product product;
 	
-	@OneToOne
-	@JoinColumn(name = "order_id")
-	private Order order;
+	@PrePersist
+	void createdAt() {
+		this.createdAt = this.updatedAt = new Date();
+	}
+
+	@PreUpdate
+	void updatedAt() {
+		this.updatedAt = new Date();
+	}
+	
 
 }

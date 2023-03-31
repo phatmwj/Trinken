@@ -20,6 +20,12 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepo.findAll();
 	}
+
+	@Override
+	public User login(String username, String password) {
+		
+		return null;
+	}
 	
 
 }
