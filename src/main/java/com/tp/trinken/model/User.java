@@ -51,6 +51,7 @@ public class User implements Serializable{
 	private String user_name;
 	
 	@NotNull
+	@JsonIgnore
 	private String password;
 	
 	@Nationalized
@@ -60,6 +61,9 @@ public class User implements Serializable{
 	@Nationalized
 	@Size(max = 32)
 	private String last_name;
+	
+	@Nationalized
+	private String gender;
 	
 	@Column(unique = true, nullable = false)
 	@Nationalized
