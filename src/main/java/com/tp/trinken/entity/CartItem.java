@@ -1,20 +1,18 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -29,8 +27,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Orders")
-public class Order implements Serializable {
+@Table(name="Cart_Items")
+public class CartItem implements Serializable {
 
 	/**
 	 * 
@@ -39,41 +37,25 @@ public class Order implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int order_id;
+	private int id;
 	
-	@NotNull
-	private Date order_date;
+	@Min(value=1)
+	private int quantity;
 	
-	@NotNull
-	private double total_amount;
-	
-	private Date cancelAt;
+	private double price;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
 	
-	private Date completeAt;
-	
-	private Date deliveryAt;
-	
 	@ManyToOne
-	@JoinColumn(name = "order_status_id")
+	@JoinColumn(name="product_id")
 	@JsonManagedReference
-	private OrderStatus orderStatus;
-	
-	@ManyToOne()
-	@JoinColumn(name = "customer_id")
-	@JsonManagedReference
-	private User customer;
-	
-	@OneToOne
-	@JoinColumn(name = "payment_method_id")
-	private PaymentMethod paymentmethod;
+	private Product product;
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate
@@ -81,5 +63,5 @@ public class Order implements Serializable {
 		this.updatedAt = new Date();
 	}
 	
-		
+
 }

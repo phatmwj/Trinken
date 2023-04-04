@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tp.trinken.model.User;
+import com.tp.trinken.entity.User;
 import com.tp.trinken.repository.UserRepo;
 import com.tp.trinken.service.UserService;
 
@@ -23,24 +23,45 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User login(String username, String password) {
+	public Optional<User> login(String username, String password) {
 		
-		return userRepo.verifyUser(username, password);
+		return userRepo.findOneByUserNameAndPassword(username, password);
 	}
 
 	@Override
-	public Optional<User> findByUsername(String username) {
+	public Boolean checkUsername(String username) {
 		
-		return userRepo.findByUsername(username);
+		return userRepo.existsByUserName(username);
+	}
+
+	@Override
+	public Boolean checkEmail(String email) {
+		
+		return userRepo.existsByEmail(email);
+	}
+
+	@Override
+	public Optional<User> findByUserName(String username) {
+		
+		return userRepo.findOneByUserName(username);
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
 		
-		return userRepo.findByEmail(email);
+		return userRepo.findOneByEmail(email);
 	}
 
+	@Override
+	public <S extends User> S save(S entity) {
+		
+		return userRepo.save(entity);
+	}
 
-	
+	@Override
+	public Optional<User> findById(Integer id) {
+		
+		return userRepo.findById(id);
+	}
 
 }

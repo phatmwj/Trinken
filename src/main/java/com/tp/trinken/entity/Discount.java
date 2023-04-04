@@ -1,18 +1,19 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Nationalized;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -27,9 +28,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Roles")
-public class Role implements Serializable{
-
+@Table(name="Discounts")
+public class Discount implements Serializable {
 	/**
 	 * 
 	 */
@@ -37,16 +37,29 @@ public class Role implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int role_id;
+	private int id;
+
+	@Column(name="discount_code",nullable = false)
+	private String discountCode;
 	
-	@Column(unique = true,nullable = false)
-	@Nationalized
-	private String role_name;
+	@Column(name="discount_type")
+	@Enumerated(EnumType.ORDINAL)
+	private DiscountType discountType;
+
+	@Column(name="discount_value",nullable = false)
+	private double discountValue;
+
+	@Column(name="start_date",nullable = false)
+	private Date startDate;
+
+	@Column(name="end_date",nullable = false)
+	private Date endDate;
 	
-	@OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
+	private int status;
+	
+	@OneToMany(mappedBy = "discount",cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<User>users;
-	
+	private List<Product>products;
 	
 
 }

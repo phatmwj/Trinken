@@ -1,23 +1,19 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Nationalized;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +26,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Product_Reviews")
-public class ProductReview implements Serializable {
+@Table(name="Assets")
+public class Asset implements Serializable{
 
 	/**
 	 * 
@@ -40,34 +36,26 @@ public class ProductReview implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int review_id;
+	private int id;
 	
-	@NotNull
-	@Min(value = 0)
-	private int rating;
+	private String path;
 	
-	@NotNull
-	@Nationalized
-	private String comment;
+	private String type;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	private Date deleteAt;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
 	
-	@OneToOne
-	@JoinColumn(name="product_id")
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	@JsonManagedReference
 	private Product product;
-	
-	@ManyToOne()
-	@JoinColumn(name = "customer_id")
-	private User customer;
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate

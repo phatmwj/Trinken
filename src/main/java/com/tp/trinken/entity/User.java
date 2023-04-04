@@ -1,4 +1,4 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,48 +45,49 @@ public class User implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int user_id;
+	private int id;
 	
-	@Column(unique = true,nullable = false)
+	@Column(name="user_name",unique = true,nullable = false)
 	@Size(max = 32)
-	private String user_name;
-	
-	@NotNull
+	private String userName;
+
 	@JsonIgnore
+	@NotNull
 	private String password;
 	
 	@Nationalized
 	@Size(max = 32)
-	private String first_name;
+	@Column(name="first_name")
+	private String firstName;
 	
 	@Nationalized
 	@Size(max = 32)
-	private String last_name;
+	@Column(name="last_name")
+	private String lastName;
 	
 	@Nationalized
 	private String gender;
 	
 	@Column(unique = true, nullable = false)
-	@Nationalized
 	private String email;
 	
-	@Column(unique = true, nullable = false)
-	private String phone_number;
-	
-	@NotNull
+	@Column(name="phone_number",unique = true, nullable = true)
+	private String phoneNumber;
+
 	@Nationalized
 	private String address;
 	
 	private String image;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean active;
+	@Column(columnDefinition="tinyint(1) default 1")
+	private boolean active = true;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
 	
-	private Date last_login;
+	@Column(name="last_login")
+	private Date lastLogin;
 	
 	@ManyToOne
 	@JoinColumn(name="role_id")
@@ -106,7 +108,7 @@ public class User implements Serializable{
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate

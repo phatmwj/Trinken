@@ -1,4 +1,4 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +20,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -45,11 +44,11 @@ public class Product implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int product_id;
+	private int id;
 	
-	@Column(unique = true,nullable = false)
+	@Column(name="product_name",unique = true,nullable = false)
 	@Nationalized
-	private String product_name;
+	private String productName;
 	
 	@NotNull
 	@Min(value = 0)
@@ -66,8 +65,8 @@ public class Product implements Serializable{
 	@Min(value = 0)
 	private int sold;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean active;
+	@Column(columnDefinition="tinyint(1) default 1")
+	private boolean active = true;
 	
 	private Date deleteAt;
 	
@@ -99,7 +98,7 @@ public class Product implements Serializable{
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate

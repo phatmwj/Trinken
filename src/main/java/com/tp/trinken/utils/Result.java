@@ -1,24 +1,26 @@
 package com.tp.trinken.utils;
 
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Result implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+import com.tp.trinken.entity.User;
+
+public class Result{
 	
-	private boolean error;
+	public Map<String, Object> result(boolean error, String message){
+		Map<String , Object>map=new HashMap<>();
+		map.put("error", error);
+		map.put("message", message);
+		return map;
+	}
 	
-	private String message;
+	public Map<String, Object> resultUser(boolean error, String message,User user){
+		Map<String , Object>map=new HashMap<>();
+		map.put("error", error);
+		map.put("message", message);
+		map.put("user", user);
+		return map;
+	}
 	
-	private Object object;
+
 }

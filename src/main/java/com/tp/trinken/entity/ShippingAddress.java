@@ -1,23 +1,23 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +30,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Brands")
-
-public class Brand implements Serializable{
+@Table(name="Shipping_Addresses")
+public class ShippingAddress implements Serializable {
 
 	/**
 	 * 
@@ -41,32 +40,39 @@ public class Brand implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int brand_id;
+	private int id;
 	
-	@Column(unique = true,nullable = false)
+	@NotNull
 	@Nationalized
-	private String brand_name;
+	private String name;
 	
-	private String image;
+	@Column(name = "phone_number",nullable = false)
+	private String phoneNumber;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean active;
+	@NotNull
+	@Nationalized
+	private String address;
+	
+	@Column(columnDefinition="tinyint(1) default 1")
+	private boolean active = true;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
 	
-	@OneToMany(mappedBy ="brand",cascade = CascadeType.ALL )
-	@JsonBackReference
-	private List<Product> product;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonManagedReference
+	private User user;
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate
 	void updatedAt() {
 		this.updatedAt = new Date();
 	}
+
 }

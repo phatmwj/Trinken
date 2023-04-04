@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tp.trinken.model.Role;
+import com.tp.trinken.entity.Role;
 import com.tp.trinken.service.RoleService;
 
 @RestController

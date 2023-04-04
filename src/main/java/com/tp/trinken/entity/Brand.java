@@ -1,4 +1,4 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,13 +7,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -33,44 +30,43 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "Categories")
-public class Category implements Serializable {
+@Table(name="Brands")
+
+public class Brand implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int category_id;
-
-	@Column(unique = true, nullable = false)
+	private int id;
+	
+	@Column(name="brand_name",unique = true,nullable = false)
 	@Nationalized
-	private String category_name;
-
+	private String brandName;
+	
 	private String image;
 	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean active;
+	@Column(columnDefinition="tinyint(1) default 1")
+	private boolean active = true;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+	
+	@OneToMany(mappedBy ="brand",cascade = CascadeType.ALL )
 	@JsonBackReference
-	private List<Product> products;
+	private List<Product> product;
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate
 	void updatedAt() {
 		this.updatedAt = new Date();
 	}
-
 }

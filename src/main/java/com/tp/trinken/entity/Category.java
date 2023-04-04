@@ -1,23 +1,26 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Nationalized;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,44 +33,39 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Shipping_Addresses")
-public class ShippingAddress implements Serializable {
+@Table(name = "Categories")
+public class Category implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int address_id;
-	
-	@NotNull
+	private int id;
+
+	@Column(name="category_name",unique = true, nullable = false)
 	@Nationalized
-	private String name;
+	private String categoryName;
+
+	private String image;
 	
-	@NotNull
-	private String phone_number;
-	
-	@NotNull
-	@Nationalized
-	private String address;
-	
-	@Column(columnDefinition="tinyint(1) default 0")
-	private boolean is_deleted;
+	@Column(columnDefinition="tinyint(1) default 1")
+	private boolean active =true;
 	
 	private Date createdAt;
 	
 	private Date updatedAt;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	@JsonManagedReference
-	private User user;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+	@JsonBackReference
+	private List<Product> products;
 	
 	@PrePersist
 	void createdAt() {
-		this.createdAt = this.updatedAt = new Date();
+		this.createdAt = new Date();
 	}
 
 	@PreUpdate

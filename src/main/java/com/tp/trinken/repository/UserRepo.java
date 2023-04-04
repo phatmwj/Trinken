@@ -5,17 +5,19 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import com.tp.trinken.model.User;
+
+import com.tp.trinken.entity.User;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Long>{
+public interface UserRepo extends JpaRepository<User, Integer>{
 	
-	@Query(value = "Select * from users where user_name=? and password=?",nativeQuery = true)
-	User verifyUser(String username, String password);
+	Optional<User> findOneByUserName(String username);
 	
-	@Query(value="select *from users where user_name=?",nativeQuery = true)
-	Optional<User> findByUsername(String username);
+	Optional<User> findOneByEmail(String email);
 	
-	@Query(value = "select * from users where email=?",nativeQuery = true)
-	Optional<User> findByEmail(String email);
+    Boolean existsByEmail(String email);
+    
+    Boolean existsByUserName(String username);
+    
+    Optional<User> findOneByUserNameAndPassword(String username,String password);
 }

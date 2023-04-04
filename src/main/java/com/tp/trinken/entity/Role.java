@@ -1,4 +1,4 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,8 +27,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Order_Status")
-public class OrderStatus implements Serializable{
+@Table(name="Roles")
+public class Role implements Serializable{
 
 	/**
 	 * 
@@ -37,14 +37,16 @@ public class OrderStatus implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int order_status_id;
+	private int id;
 	
-	@Column(unique = true,nullable = false)
+	@Column(name="role_name",unique = true,nullable = false)
 	@Nationalized
-	private String order_status_name;
+	private String roleName;
 	
-	@OneToMany(mappedBy = "orderStatus",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<Order>orders;
+	private List<User>users;
+	
+	
 
 }

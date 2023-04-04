@@ -1,13 +1,12 @@
-package com.tp.trinken.model;
+package com.tp.trinken.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,9 +20,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Carts")
-public class Cart implements Serializable {
-
+@Table(name="Payment_Methods")
+public class PaymentMethod implements Serializable{
 	/**
 	 * 
 	 */
@@ -31,10 +29,9 @@ public class Cart implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private  int id;
 	
-	@OneToOne
-	@JoinColumn(name="customer_id")
-	private User customer;
+	@Column(name="payment_method_name",unique = true)
+	private String paymentMethodName;
 
 }

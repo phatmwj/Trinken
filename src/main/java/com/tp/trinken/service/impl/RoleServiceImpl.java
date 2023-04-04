@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tp.trinken.model.Role;
+import com.tp.trinken.entity.Role;
 import com.tp.trinken.repository.RoleRepo;
 import com.tp.trinken.service.RoleService;
 
