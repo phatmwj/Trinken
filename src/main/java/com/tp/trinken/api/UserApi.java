@@ -118,11 +118,11 @@ public class UserApi {
 	
 	
 	//delete image
-//	@PostMapping(value="/delete-avatar")
-//	public String deleteImage(@RequestParam String imageUrl) {
-//		return cloudinaryService.delete(imageUrl);
-//		
-//	}
+	@PostMapping(value="/delete-avatar")
+	public void deleteImage(@RequestParam String imageUrl) {
+		cloudinaryService.delete(imageUrl);
+		
+	}
 	
 }
 	
