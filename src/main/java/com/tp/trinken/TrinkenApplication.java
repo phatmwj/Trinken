@@ -11,16 +11,13 @@ import com.cloudinary.utils.ObjectUtils;
 public class TrinkenApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TrinkenApplication.class, args);	
+		SpringApplication.run(TrinkenApplication.class, args);
 	}
+
 	@Bean
 	public Cloudinary cloudinary() {
-		Cloudinary c=new Cloudinary(ObjectUtils.asMap(
-				"cloud_name", "dqnogv8iz",
-				"api_key", "796285712551151",
-				"api_secret", "PdUCEelGAWB4R9cahOqFlYQ0JEQ",
-				"secure",true
-				));
+		Cloudinary c = new Cloudinary(ObjectUtils.asMap("cloud_name", "dc6weg8vp", "api_key", "915129338674733",
+				"api_secret", "K4EOcGg37-64fjSWaeR5-y4Y9P0", "secure", true));
 		return c;
 	}
 
