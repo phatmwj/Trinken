@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -28,6 +30,7 @@ import com.tp.trinken.dto.SignUpDto;
 import com.tp.trinken.dto.UserDto;
 import com.tp.trinken.entity.User;
 import com.tp.trinken.service.CloudinaryService;
+import com.tp.trinken.service.EmailService;
 import com.tp.trinken.service.UserService;
 import com.tp.trinken.utils.Result;
 
@@ -40,6 +43,9 @@ public class UserApi {
 	
 	@Autowired
 	CloudinaryService cloudinaryService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	Result rs=new Result();
 	
@@ -66,6 +72,7 @@ public class UserApi {
 				User user= new User();
 				BeanUtils.copyProperties(signUpDto, user);
 				userService.save(user);
+				emailService.sendMail(user.getEmail());
 				return new ResponseEntity<>(rs.resultUser(false,"Đăng kí thành công",user),HttpStatus.OK);
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -122,6 +129,37 @@ public class UserApi {
 	public void deleteImage(@RequestParam String imageUrl) {
 		cloudinaryService.delete(imageUrl);
 		
+	}
+	
+	//Forgot password
+	@PostMapping(value="/forgot-password")
+	public ResponseEntity<?>ForgotPassword(@RequestParam String email){
+		try {
+			emailService.sendMail(email);
+			return new ResponseEntity<>(rs.result(false, "Đã gửi mã xác thực thành công"),HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(rs.result(true, "Failed"),HttpStatus.NOT_IMPLEMENTED);
+		}
+	}
+	
+	
+	//Auth
+	@PostMapping(value="/auth")
+	public ResponseEntity<?>Auth(@RequestParam int code, HttpServletRequest request){
+		HttpSession session= request.getSession();
+//		String recode = (String) session.getAttribute("code");
+		if(session!=null) {
+			Integer recode= Integer.parseInt((String) session.getAttribute("code"));
+			if(code == recode) {
+//				session.invalidate();
+				return new ResponseEntity<>(rs.result(false, "Xác thực thành công"),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<>(rs.result(false, "Mã xác thực ko chính xác"),HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<>(rs.result(false, "Vui lòng nhấn vào gửi lại mã"),HttpStatus.OK);
+		}
 	}
 	
 }
