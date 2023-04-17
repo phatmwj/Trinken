@@ -47,8 +47,5 @@ public class ProductApi {
 	}
 
 	@PostMapping(value = "/create")
-	public ResponseEntity<?> addNewProduct(@Valid @RequestBody Product product, @RequestParam MultipartFile imageFile) {
-
-		return null;
-	}
+	
 }
