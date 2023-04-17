@@ -15,6 +15,6 @@ public interface CategoryService {
 
 	List<Category> findByActive(boolean active);
 
-	Boolean checkCategoryName(String name);
+	Boolean existsByCategoryName(String name);
 
 }
