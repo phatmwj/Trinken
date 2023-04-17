@@ -24,4 +24,10 @@ public class ProductServiceImpl implements ProductService {
 		return productRepo.findAll();
 	}
 
+	@Override
+	public Boolean existsByCategoryName(String name) {
+		// TODO Auto-generated method stub
+		return productRepo.existsByProductName(name);
+	}
+
 }

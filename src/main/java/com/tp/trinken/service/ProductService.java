@@ -10,4 +10,6 @@ public interface ProductService {
 
 	<S extends Product> S save(S entity);
 
+	Boolean existsByCategoryName(String name);
+
 }

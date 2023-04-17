@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Boolean checkCategoryName(String name) {
+	public Boolean existsByCategoryName(String name) {
 		// TODO Auto-generated method stub
 		return categoryRepo.existsByCategoryName(name);
 	}

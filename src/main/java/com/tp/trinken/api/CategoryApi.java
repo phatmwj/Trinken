@@ -64,7 +64,7 @@ public class CategoryApi {
 	@PostMapping(value = "/add")
 	public ResponseEntity<?> addCategory(@Valid @ModelAttribute CategoryDto categoryDto) {
 		Category category = new Category();
-		if (!categoryService.checkCategoryName(categoryDto.getName())) {
+		if (!categoryService.existsByCategoryName(categoryDto.getName())) {
 			category.setCategoryName(categoryDto.getName());
 			if (categoryDto.getImage() != null) {
 				category.setImage(cloudinaryService.upload(categoryDto.getImage()));
@@ -104,7 +104,7 @@ public class CategoryApi {
 		Optional<Category> optional = categoryService.findById(id);
 		Category category = optional.get();
 
-		if (categoryDto.getName() != null && !categoryService.checkCategoryName(categoryDto.getName())) {
+		if (categoryDto.getName() != null && !categoryService.existsByCategoryName(categoryDto.getName())) {
 			category.setCategoryName(categoryDto.getName());
 		}
 		if (categoryDto.getImage() != null) {
