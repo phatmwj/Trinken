@@ -1,6 +1,7 @@
 package com.tp.trinken.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -59,11 +60,24 @@ public class ProductApi {
 			product.setDescription(productDto.getDescription());
 			int pid = productService.save(product).getId();
 
-			for (MultipartFile files : file) {
-
-			}
+			/*
+			 * for (MultipartFile files : file) {
+			 * 
+			 * }
+			 */
 
 		}
 		return null;
+	}
+
+	@GetMapping(value = "/get-product-by-id")
+	public ResponseEntity<?> getProductById(@Valid @RequestParam Integer id) {
+		Optional<Product> productOptional = productService.findById(id);
+		if (productOptional != null) {
+			return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
+		}
+
 	}
 }

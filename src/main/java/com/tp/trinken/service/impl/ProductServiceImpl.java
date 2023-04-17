@@ -1,6 +1,7 @@
 package com.tp.trinken.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class ProductServiceImpl implements ProductService {
 	public Boolean existsByCategoryName(String name) {
 		// TODO Auto-generated method stub
 		return productRepo.existsByProductName(name);
+	}
+
+	@Override
+	public Optional<Product> findById(Integer id) {
+		return productRepo.findById(id);
 	}
 
 }
