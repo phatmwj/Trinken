@@ -63,16 +63,15 @@ public class UserApi {
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto){
 		Optional<User> userOptional=userService.findByUserName(signUpDto.getUserName());
 		if(!userOptional.isEmpty() /*&& userOptional.get().isActive()*/){
-			return new ResponseEntity<>(rs.result(true,"Tài khoản đã tồn tại"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(rs.result(true,"Tài khoản đã tồn tại"),HttpStatus.CONFLICT);
 		}
 		else if(userService.checkEmail(signUpDto.getEmail())) {
-			return new ResponseEntity<>(rs.result(true,"Email đã tồn tại"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(rs.result(true,"Email đã tồn tại"),HttpStatus.CONFLICT);
 		}else {
 			try {
 				User user= new User();
 				BeanUtils.copyProperties(signUpDto, user);
 				userService.save(user);
-				emailService.sendMail(user.getEmail());
 				return new ResponseEntity<>(rs.resultUser(false,"Đăng kí thành công",user),HttpStatus.OK);
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -148,17 +147,45 @@ public class UserApi {
 	@PostMapping(value="/auth")
 	public ResponseEntity<?>Auth(@RequestParam int code, HttpServletRequest request){
 		HttpSession session= request.getSession();
-//		String recode = (String) session.getAttribute("code");
-		if(session!=null) {
-			Integer recode= Integer.parseInt((String) session.getAttribute("code"));
-			if(code == recode) {
-//				session.invalidate();
+		String recode = (String) session.getAttribute("code");
+		if(session!=null && recode!=null) {
+			Integer code2= Integer.parseInt(recode);
+			if(code == code2) {
+				session.invalidate();
 				return new ResponseEntity<>(rs.result(false, "Xác thực thành công"),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<>(rs.result(false, "Mã xác thực ko chính xác"),HttpStatus.OK);
 			}
 		}else {
-			return new ResponseEntity<>(rs.result(false, "Vui lòng nhấn vào gửi lại mã"),HttpStatus.OK);
+			return new ResponseEntity<>(rs.result(false, "Vui lòng yêu cầu gửi mã xác nhận mới"),HttpStatus.OK);
+		}
+	}
+	
+	@PutMapping(value="/create-new-pasword")
+	public ResponseEntity<?>CreateNewPassword(@RequestParam String email,@RequestParam String password, @RequestParam String rePassword){
+		User user=userService.findByEmail(email).get();
+		if(password.equals(rePassword)) {
+			user.setPassword(password);
+			userService.save(user);
+			return new ResponseEntity<>(rs.result(false, "Tạo thành công mật khẩu mới"),HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(rs.result(false, "Xác nhận lại mật khẩu của bạn"),HttpStatus.CONFLICT);
+		}
+	}
+	
+	@PutMapping(value="/{id}/change-password")
+	public ResponseEntity<?>ChangePassword(@PathVariable int id,@RequestParam String password, @RequestParam String newPassword, @RequestParam String rePassword){
+		User user= userService.findById(id).get();
+		if(user.getPassword().equals(password)) {
+			if(newPassword.equals(rePassword)) {
+				user.setPassword(newPassword);
+				userService.save(user);
+				return new ResponseEntity<>(rs.result(false, "Đổi mật khẩu thành công"),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<>(rs.result(false, "Xác nhận lại mật khẩu mới không đúng"),HttpStatus.CONFLICT);
+			}
+		}else {
+			return new ResponseEntity<>(rs.result(false, "Mật khẩu của bạn không đúng"),HttpStatus.CONFLICT);
 		}
 	}
 	

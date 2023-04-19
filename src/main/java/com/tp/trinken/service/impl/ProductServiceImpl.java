@@ -26,6 +26,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Boolean checkExitsProductName(String ProductName) {
+		
+		return productRepo.existsByProductName(ProductName);
+  }
 	public Boolean existsByCategoryName(String name) {
 		// TODO Auto-generated method stub
 		return productRepo.existsByProductName(name);
@@ -34,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Optional<Product> findById(Integer id) {
 		return productRepo.findById(id);
+
 	}
 
 }

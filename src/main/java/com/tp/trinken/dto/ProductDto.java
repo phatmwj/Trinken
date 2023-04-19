@@ -1,6 +1,9 @@
 package com.tp.trinken.dto;
 
+import java.awt.Image;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tp.trinken.entity.Asset;
 import com.tp.trinken.entity.Brand;
@@ -13,11 +16,12 @@ public class ProductDto {
 	private String productName;
 	private String description;
 	private double price;
+	private MultipartFile imageFile;
 
 	private int quantity;
-	private Brand brand;
+	private int brandId;
 
-	private List<Category> catgories;
-	private List<Asset> assets;
+	private List<Integer> categoryIds;
+	private List<MultipartFile> imageFiles;
 
 }
