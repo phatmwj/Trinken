@@ -7,5 +7,7 @@ import com.tp.trinken.entity.Product;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
+	
+	Boolean existsByProductName(String productName);
 
 }

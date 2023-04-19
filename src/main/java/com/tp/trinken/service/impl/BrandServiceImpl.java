@@ -14,13 +14,19 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Boolean checkExistsByBrandName(String name) {
-		// TODO Auto-generated method stub
+		
 		return brandRepo.existsByBrandName(name);
 	}
 
 	@Override
 	public <S extends Brand> S save(S entity) {
 		return brandRepo.save(entity);
+	}
+
+	@Override
+	public Brand findById(Integer id) {
+		
+		return brandRepo.findById(id).get();
 	}
 
 }

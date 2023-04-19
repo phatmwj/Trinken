@@ -9,5 +9,7 @@ public interface ProductService {
 	List<Product> findAll();
 
 	<S extends Product> S save(S entity);
+	
+	Boolean checkExitsProductName(String ProductName);
 
 }

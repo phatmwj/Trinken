@@ -24,4 +24,10 @@ public class ProductServiceImpl implements ProductService {
 		return productRepo.findAll();
 	}
 
+	@Override
+	public Boolean checkExitsProductName(String ProductName) {
+		
+		return productRepo.existsByProductName(ProductName);
+	}
+
 }

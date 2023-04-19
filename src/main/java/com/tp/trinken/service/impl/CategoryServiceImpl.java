@@ -1,5 +1,6 @@
 package com.tp.trinken.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,14 +33,23 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> findByActive(boolean active) {
-		// TODO Auto-generated method stub
+		
 		return categoryRepo.findByActive(active);
 	}
 
 	@Override
 	public Boolean checkCategoryName(String name) {
-		// TODO Auto-generated method stub
+		
 		return categoryRepo.existsByCategoryName(name);
+	}
+
+	@Override
+	public List<Category> findAllByIds(List<Integer> ids) {
+		List<Category> categories = new ArrayList<>();
+		for(Integer id: ids) {
+			categories.add(categoryRepo.findById(id).get());
+		}
+		return categories;
 	}
 
 }

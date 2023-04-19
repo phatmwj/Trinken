@@ -1,5 +1,7 @@
 package com.tp.trinken.service;
 
-public interface AssetService {
+import com.tp.trinken.entity.Asset;
 
+public interface AssetService {
+	<S extends Asset> S save(S entity);
 }
