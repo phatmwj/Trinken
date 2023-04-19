@@ -33,15 +33,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> findByActive(boolean active) {
-		
+
 		return categoryRepo.findByActive(active);
 	}
 
 	@Override
 	public Boolean checkCategoryName(String name) {
-  return categoryRepo.existsByCategoryName(name);;
-  }
-		
+		return categoryRepo.existsByCategoryName(name);
+	}
+
 	public Boolean existsByCategoryName(String name) {
 		return categoryRepo.existsByCategoryName(name);
 	}
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAllByIds(List<Integer> ids) {
 		List<Category> categories = new ArrayList<>();
-		for(Integer id: ids) {
+		for (Integer id : ids) {
 			categories.add(categoryRepo.findById(id).get());
 		}
 		return categories;
