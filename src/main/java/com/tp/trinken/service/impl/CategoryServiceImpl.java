@@ -39,7 +39,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Boolean checkCategoryName(String name) {
+  return categoryRepo.existsByCategoryName(name);;
+  }
 		
+	public Boolean existsByCategoryName(String name) {
 		return categoryRepo.existsByCategoryName(name);
 	}
 

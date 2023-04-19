@@ -2,6 +2,7 @@ package com.tp.trinken.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -20,8 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tp.trinken.dto.ProductDto;
 import com.tp.trinken.entity.Asset;
+
 import com.tp.trinken.entity.Brand;
 import com.tp.trinken.entity.Category;
+
 import com.tp.trinken.entity.Product;
 import com.tp.trinken.service.AssetService;
 import com.tp.trinken.service.BrandService;
@@ -103,4 +106,36 @@ public class ProductApi {
 	}
 	
 	
+
+	public ResponseEntity<?> addNewProduct(@Valid @RequestBody ProductDto productDto,
+			@RequestParam MultipartFile imageFile, @RequestParam MultipartFile[] file) {
+		Product product = new Product();
+		Asset asset = new Asset();
+		if (productDto.getProductName() != null && !productService.existsByCategoryName(productDto.getProductName())
+				&& file.length > 0) {
+			product.setProductName(productDto.getProductName());
+			product.setDescription(productDto.getDescription());
+			int pid = productService.save(product).getId();
+
+			/*
+			 * for (MultipartFile files : file) {
+			 * 
+			 * }
+			 */
+
+		}
+		return null;
+	}
+
+	@GetMapping(value = "/get-product-by-id")
+	public ResponseEntity<?> getProductById(@Valid @RequestParam Integer id) {
+		Optional<Product> productOptional = productService.findById(id);
+		if (productOptional != null) {
+			return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
+		}
+
+	}
+
 }
