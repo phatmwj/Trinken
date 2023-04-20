@@ -12,6 +12,5 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	Boolean existsByProductName(String productName);
 
 
-	Boolean existsByProductName(String name);
 
 }
