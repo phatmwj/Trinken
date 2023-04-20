@@ -10,11 +10,15 @@ public interface ProductService {
 	List<Product> findAll();
 
 	<S extends Product> S save(S entity);
-	
+
 	Boolean checkExitsProductName(String ProductName);
 
 	Boolean existsByCategoryName(String name);
 
 	Optional<Product> findById(Integer id);
+
+	List<Product> findAllByActiveIsFalse();
+
+	List<Product> findAllByActiveIsTrue();
 
 }
