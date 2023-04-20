@@ -58,8 +58,12 @@ public class Category implements Serializable {
 	
 	private Date updatedAt;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+//	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+//	@JsonBackReference
+//	private List<Product> products;
+	
+	@ManyToMany(mappedBy = "categories")
 	@JsonBackReference
 	private List<Product> products;
 	
