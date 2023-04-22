@@ -1,5 +1,6 @@
 package com.tp.trinken.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tp.trinken.dto.CategoryDto;
 import com.tp.trinken.entity.Category;
-import com.tp.trinken.entity.User;
 import com.tp.trinken.service.CategoryService;
 import com.tp.trinken.service.CloudinaryService;
 import com.tp.trinken.service.UserService;
@@ -38,27 +38,14 @@ public class CategoryApi {
 	Result rs = new Result();
 
 	@GetMapping(value = "/get-all")
-	public ResponseEntity<List<Category>> getAllCategory(int id) {
-		Optional<User> userOptional = userService.findById(id);
-		List<Category> categories;
-		int role = userOptional.get().getRole().getId();
-		if (role == 0) {
-			categories = categoryService.findAll();
-			if (categories.size() > 0) {
-				return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
-			}
-		} else if (role == 1) {
-			categories = categoryService.findByActive(true);
-			if (categories.size() > 0) {
-				return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
-			}
+	public ResponseEntity<List<Category>> getAllCategory() {
+		List<Category> categories = new ArrayList<>();
+		categories = categoryService.findAll();
+		if (categories.size() > 0) {
+			return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
 		}
-
-		return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping(value = "/add")

@@ -17,8 +17,6 @@ public interface ProductService {
 
 	Optional<Product> findById(Integer id);
 
-	List<Product> findAllByActiveIsFalse();
-
-	List<Product> findAllByActiveIsTrue();
+	List<Product> findByActive(boolean active);
 
 }
