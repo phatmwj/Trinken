@@ -12,7 +12,6 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
 	Boolean existsByProductName(String productName);
 
-	List<Product> findAllByActiveIsTrue();
+	List<Product> findByActive(boolean active);
 
-	List<Product> findAllByActiveIsFalse();
 }

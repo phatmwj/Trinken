@@ -38,45 +38,45 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Products")
-public class Product implements Serializable{
+@Table(name = "Products")
+public class Product implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name="product_name",unique = true,nullable = false)
+
+	@Column(name = "product_name", unique = true, nullable = false)
 	@Nationalized
 	private String productName;
-	
+
 	@NotNull
 	@Min(value = 0)
 	private double price;
-	
+
 	@Nationalized
 	private String description;
-	
+
 	private String image;
-	
+
 	@Min(value = 0)
 	private int quantity;
-	
+
 	@Min(value = 0)
 	private int sold;
-	
-	@Column(columnDefinition="tinyint(1) default 1")
+
+	@Column(columnDefinition = "tinyint(1) default 1")
 	private boolean active = true;
-	
+
 	private Date deleteAt;
-	
+
 	private Date createdAt;
-	
+
 	private Date updatedAt;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
 	@JsonManagedReference
@@ -85,25 +85,25 @@ public class Product implements Serializable{
 //	@ManyToMany(mappedBy = "products")
 //	@JsonBackReference
 //	private List<Category> categories;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "category_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	@JsonManagedReference
 	private List<Category> categories;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "discount_id")
 	@JsonManagedReference
 	private Discount discount;
-	
-	@OneToMany(mappedBy = "product")
+
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<Asset>assets;
-	
+	private List<Asset> assets;
+
 	@OneToMany(mappedBy = "product")
 	@JsonBackReference
 	private List<CartItem> cartItems;
-	
+
 	@PrePersist
 	void createdAt() {
 		this.createdAt = new Date();
@@ -113,5 +113,5 @@ public class Product implements Serializable{
 	void updatedAt() {
 		this.updatedAt = new Date();
 	}
-	
+
 }

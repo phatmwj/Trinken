@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,7 +67,7 @@ public class ProductApi {
 
 	@GetMapping(value = "/get-all-active")
 	public ResponseEntity<?> getAllProductActive() {
-		List<Product> products = productService.findAllByActiveIsTrue();
+		List<Product> products = productService.findByActive(true);
 
 		if (products.size() > 0) {
 			return new ResponseEntity<>(products, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class ProductApi {
 
 	@GetMapping(value = "/get-all-unactive")
 	public ResponseEntity<?> getAllProductUnActive() {
-		List<Product> products = productService.findAllByActiveIsFalse();
+		List<Product> products = productService.findByActive(false);
 
 		if (products.size() > 0) {
 			return new ResponseEntity<>(products, HttpStatus.OK);
@@ -107,14 +107,8 @@ public class ProductApi {
 					assets.add(asset);
 				}
 				product.setAssets(assets);
-				productService.save(product);
-				for (Asset asset : assets) {
-					asset.setProduct(product);
-					assetService.save(asset);
-				}
-			} else {
-				productService.save(product);
 			}
+			productService.save(product);
 			return new ResponseEntity<>(rs.result(false, "Created product successfully!"), HttpStatus.OK);
 		} else if (productService.checkExitsProductName(productDto.getProductName())) {
 			return new ResponseEntity<>(rs.result(true, "Existed product!"), HttpStatus.CONFLICT);
@@ -124,8 +118,8 @@ public class ProductApi {
 
 	}
 
-	@GetMapping(value = "/get-product-by-id")
-	public ResponseEntity<?> getProductById(@Valid @RequestParam Integer id) {
+	@GetMapping(value = "/get-product-by-id/{id}")
+	public ResponseEntity<?> getProductById(@Valid @PathVariable Integer id) {
 		Optional<Product> productOptional = productService.findById(id);
 		if (productOptional != null) {
 			return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
@@ -133,20 +127,5 @@ public class ProductApi {
 			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
 		}
 	}
-
-//	@GetMapping(value = "/get-product-by-category")
-//	public ResponseEntity<?> getProductByCategory(@Valid @RequestParam String categoryName) {
-//		List<Product> products = new ArrayList<>();
-//
-//		List<Category> categories = new ArrayList<>();
-//		categories = categoryService.findByCategoryName(categoryName);
-//		products = productService.getProductByCategoryAndActiveIsTrue(categories);
-//
-//		if (products.size() > 0) {
-//			return new ResponseEntity<>(products, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
-//		}
-//	}
 
 }

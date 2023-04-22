@@ -43,13 +43,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> findAllByActiveIsTrue() {
-		return productRepo.findAllByActiveIsTrue();
-	}
-
-	@Override
-	public List<Product> findAllByActiveIsFalse() {
-		return productRepo.findAllByActiveIsFalse();
+	public List<Product> findByActive(boolean active) {
+		return productRepo.findByActive(active);
 	}
 
 }
