@@ -96,7 +96,7 @@ public class Product implements Serializable{
 	@JsonManagedReference
 	private Discount discount;
 	
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Asset>assets;
 	

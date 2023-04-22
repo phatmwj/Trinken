@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -105,6 +106,11 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<ShippingAddress> shippingAddresses;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cart_id")
+	@JsonManagedReference
+	private Cart cart;
 	
 	@PrePersist
 	void createdAt() {
