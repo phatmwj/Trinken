@@ -108,8 +108,9 @@ public class ProductApi {
 					assets.add(asset);
 				}
 				product.setAssets(assets);
-			  productService.save(product);
-			  return new ResponseEntity<>(rs.result(false, "Created product successfully!"), HttpStatus.OK);
+			}
+			productService.save(product);
+			return new ResponseEntity<>(rs.result(false, "Created product successfully!"), HttpStatus.OK);
 		} else if (productService.checkExitsProductName(productDto.getProductName())) {
 			return new ResponseEntity<>(rs.result(true, "Existed product!"), HttpStatus.CONFLICT);
 		} else {
