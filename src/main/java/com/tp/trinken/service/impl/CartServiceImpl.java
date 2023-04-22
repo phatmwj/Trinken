@@ -36,4 +36,9 @@ public class CartServiceImpl implements CartService {
 		return cartRepo.findOneByCustomer(customer);
 	}
 
+	@Override
+	public Optional<Cart> findOneById(int id) {
+		return cartRepo.findOneById(id);
+	}
+
 }

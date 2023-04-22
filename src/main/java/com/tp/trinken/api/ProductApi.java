@@ -99,10 +99,10 @@ public class ProductApi {
 			Brand brand = brandService.findById(productDto.getBrandId());
 			product.setBrand(brand);
 			BeanUtils.copyProperties(productDto, product);
-			if(productDto.getImageFiles()!=null) {
-				List<Asset> assets=new ArrayList<>();
-				for(MultipartFile imageFile: productDto.getImageFiles()) {
-					Asset asset=new Asset();
+			if (productDto.getImageFiles() != null) {
+				List<Asset> assets = new ArrayList<>();
+				for (MultipartFile imageFile : productDto.getImageFiles()) {
+					Asset asset = new Asset();
 					asset.setPath(cloudinaryService.upload(imageFile));
 					asset.setProduct(product);
 					assets.add(asset);
@@ -127,6 +127,24 @@ public class ProductApi {
 		} else {
 			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
 		}
+	}
+
+	@GetMapping(value = "get-product-by-category/active={active}/cateid={id}")
+	public ResponseEntity<?> getProductByCategory(@PathVariable("active") Boolean active,
+			@PathVariable("id") Integer category_id) {
+		List<Product> products = new ArrayList<>();
+		if (active) {
+			products = productService.getProductByCategoryAndActive(1, category_id);
+		} else {
+			products = productService.getProductByCategoryAndActive(0, category_id);
+		}
+
+		if (products.size() > 0) {
+			return new ResponseEntity<>(products, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
+		}
+
 	}
 
 }
