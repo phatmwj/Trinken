@@ -16,4 +16,6 @@ public interface CartService {
 
 	Optional<Cart> findOneByCustomer(User customer);
 
+	Optional<Cart> findOneById(int id);
+
 }
