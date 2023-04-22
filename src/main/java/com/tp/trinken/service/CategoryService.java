@@ -22,5 +22,7 @@ public interface CategoryService {
 
 	Boolean existsByCategoryName(String name);
 
+	List<Category> findByCategoryName(String name);
+
 
 }

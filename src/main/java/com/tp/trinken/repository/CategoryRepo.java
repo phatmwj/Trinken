@@ -18,4 +18,6 @@ public interface CategoryRepo extends JpaRepository<Category, Integer> {
 	List<Category> findByActive(boolean active);
 
 	Boolean existsByCategoryName(String name);
+
+	List<Category> findByCategoryName(String categoryName);
 }
