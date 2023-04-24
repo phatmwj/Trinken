@@ -95,13 +95,20 @@ public class UserApi {
 		} else if (!userOptional.get().isActive()) {
 			return new ResponseEntity<>(rs.result(true, "Tài khoản không còn hoạt động"), HttpStatus.ACCEPTED);
 		} else {
-			userOptional.get().setLastLogin(Calendar.getInstance().getTime());
-			userService.save(userOptional.get());
 			return new ResponseEntity<>(rs.resultUser(false, "Đăng nhập thành công", userOptional.get()),
 					HttpStatus.OK);
 		}
 	}
-
+	
+	@PutMapping(value = "/logout/userid={id}")
+	public void logoutUser(@PathVariable("id") Integer id ){
+		User user = userService.findById(id).get();
+		user.setLastLogin(Calendar.getInstance().getTime());
+		userService.save(user);
+//		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
 	// update profile
 	@PutMapping(value = "/profile/{id}")
 	public ResponseEntity<?> updateProfile(@PathVariable Integer id, @Valid @ModelAttribute ProfileDto profileDto) {
