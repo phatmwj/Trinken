@@ -47,4 +47,9 @@ public class ProductServiceImpl implements ProductService {
 		return productRepo.findByActive(active);
 	}
 
+	@Override
+	public List<Product> getProductByCategoryAndActive(Integer active, Integer category_id) {
+		return productRepo.getProductByCategoryAndActive(active, category_id);
+	}
+
 }

@@ -19,4 +19,6 @@ public interface ProductService {
 
 	List<Product> findByActive(boolean active);
 
+	List<Product> getProductByCategoryAndActive(Integer active, Integer category_id);
+
 }
