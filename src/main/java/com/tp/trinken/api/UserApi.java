@@ -1,5 +1,6 @@
 package com.tp.trinken.api;
 
+import java.io.Console;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -95,23 +96,37 @@ public class UserApi {
 		} else if (!userOptional.get().isActive()) {
 			return new ResponseEntity<>(rs.result(true, "Tài khoản không còn hoạt động"), HttpStatus.ACCEPTED);
 		} else {
-			userOptional.get().setLastLogin(Calendar.getInstance().getTime());
-			userService.save(userOptional.get());
 			return new ResponseEntity<>(rs.resultUser(false, "Đăng nhập thành công", userOptional.get()),
 					HttpStatus.OK);
 		}
 	}
-
+	
+	@PutMapping(value = "/logout/userid={id}")
+	public void logoutUser(@PathVariable("id") Integer id ){
+		User user = userService.findById(id).get();
+		user.setLastLogin(Calendar.getInstance().getTime());
+		userService.save(user);
+//		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
 	// update profile
 	@PutMapping(value = "/profile/{id}")
 	public ResponseEntity<?> updateProfile(@PathVariable Integer id, @Valid @ModelAttribute ProfileDto profileDto) {
 		User user = userService.findById(id).get();
+		if(profileDto.getUserName()== null && !userService.checkUsername(profileDto.getUserName())) {
+			profileDto.setUserName(user.getUserName());
+		}
+		if(profileDto.getEmail()==null && !userService.checkEmail(profileDto.getEmail())){
+			profileDto.setEmail(user.getEmail());
+		}
 		if (profileDto.getImageFile() != null) {
 			if (user.getImage() != null) {
 				cloudinaryService.delete(user.getImage());
 			}
 			user.setImage(cloudinaryService.upload(profileDto.getImageFile()));
 		}
+	
 		BeanUtils.copyProperties(profileDto, user);
 		try {
 			userService.save(user);
@@ -121,6 +136,18 @@ public class UserApi {
 			return new ResponseEntity<>(rs.result(false, "Error"), HttpStatus.NOT_IMPLEMENTED);
 		}
 
+	}
+	
+	@PutMapping(value = "/update/profile/userid={id}")
+	public ResponseEntity<?> updateUser(@RequestBody User user, @RequestParam MultipartFile imageFile){
+		if (imageFile!= null) {
+			if(user.getImage()!= null) {
+				cloudinaryService.delete(user.getImage());
+			}
+			user.setImage(cloudinaryService.upload(imageFile));
+		}
+		return new ResponseEntity<>(rs.resultUser(false, "Đã cập nhật thành công", user), HttpStatus.OK);
+		
 	}
 
 	// upload image

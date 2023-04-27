@@ -4,12 +4,15 @@ import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.Role;
 
 import lombok.Data;
 
 @Data
 public class UserDto {
+	
+	private Integer id;
 	
 	private String firstName;
 
@@ -32,6 +35,8 @@ public class UserDto {
 	private Date lastLogin;
 
 	private Role role;
+	
+	private Cart cart;
 	
 	private MultipartFile imageFile;
 }
