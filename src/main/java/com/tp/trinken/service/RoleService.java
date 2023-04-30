@@ -5,7 +5,9 @@ import java.util.List;
 import com.tp.trinken.entity.Role;
 
 public interface RoleService {
-	
+
 	List<Role> findAll();
+
+	<S extends Role> S save(S entity);
 
 }

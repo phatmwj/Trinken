@@ -28,38 +28,38 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Discounts")
+@Table(name = "Discounts")
 public class Discount implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="discount_code",nullable = false)
+	@Column(name = "discount_code", nullable = false)
 	private String discountCode;
-	
-	@Column(name="discount_type")
+
+	@Column(name = "discount_type")
 	@Enumerated(EnumType.ORDINAL)
 	private DiscountType discountType;
 
-	@Column(name="discount_value",nullable = false)
+	@Column(name = "discount_value", nullable = false)
 	private double discountValue;
 
-	@Column(name="start_date",nullable = false)
+	@Column(name = "start_date", nullable = false)
 	private Date startDate;
 
-	@Column(name="end_date",nullable = false)
+	@Column(name = "end_date", nullable = false)
 	private Date endDate;
-	
+
+	@Column(columnDefinition = "tinyint(1) default 1")
 	private int status;
-	
-	@OneToMany(mappedBy = "discount",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "discount", cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<Product>products;
-	
+	private List<Product> products;
 
 }
