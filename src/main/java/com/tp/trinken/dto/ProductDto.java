@@ -1,13 +1,8 @@
 package com.tp.trinken.dto;
 
-import java.awt.Image;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import com.tp.trinken.entity.Asset;
-import com.tp.trinken.entity.Brand;
-import com.tp.trinken.entity.Category;
 
 import lombok.Data;
 

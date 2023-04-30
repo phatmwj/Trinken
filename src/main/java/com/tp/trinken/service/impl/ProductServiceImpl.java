@@ -52,4 +52,46 @@ public class ProductServiceImpl implements ProductService {
 		return productRepo.getProductByCategoryAndActive(active, category_id);
 	}
 
+	@Override
+	public List<Product> findAllProductByCategoryAndActiveOrderByPriceAsc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryAndActiveOrderByPriceAsc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryAndActiveOrderByPriceDesc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryAndActiveOrderByPriceDesc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByIdAsc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByIdAsc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByIdDesc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByIdDesc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByProductNameAsc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByProductNameAsc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByProductNameDesc(Integer active,
+			Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByProductNameDesc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(Integer active, Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(active, category_id);
+	}
+
+	@Override
+	public List<Product> findAllProductByCategoryIdAndActiveOrderByProductSoldDesc(Integer active,
+			Integer category_id) {
+		return productRepo.findAllProductByCategoryIdAndActiveOrderByProductSoldDesc(active, category_id);
+	}
+
 }
