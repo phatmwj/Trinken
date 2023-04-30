@@ -63,6 +63,8 @@ public class CartItemApi {
 		if (cart != null && product.isActive()) {
 			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
 			CartItem cartItem = new CartItem();
+			cartItem.setCart(cart);
+			cartItem.setProduct(product);
 			// check xem trong cartItem của người này đã có sản phẩm này chưa
 			if (!cartItemOptional.isEmpty()) {
 				cartItem = cartItemOptional.get();
