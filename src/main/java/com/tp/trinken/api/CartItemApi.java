@@ -1,7 +1,9 @@
 package com.tp.trinken.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tp.trinken.dto.CartItemDto;
 import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.CartItem;
+import com.tp.trinken.entity.DiscountType;
 import com.tp.trinken.entity.Product;
 import com.tp.trinken.service.CartItemService;
 import com.tp.trinken.service.CartService;
@@ -57,28 +60,57 @@ public class CartItemApi {
 	public ResponseEntity<?> addCartItem(@Valid @RequestBody CartItemDto cartItemDto) {
 		Product product = productService.findById(cartItemDto.getProductId()).get();
 		Cart cart = cartService.findOneById(cartItemDto.getCartId()).get();
-		if (cart != null && !product.isActive()) {
-
+		if (cart != null && product.isActive()) {
+			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
+			CartItem cartItem = new CartItem();
 			// check xem trong cartItem của người này đã có sản phẩm này chưa
-			if (cartItemService.findOneByCartAndProduct(cart, product).get() == null) {
-				CartItem cartItem = new CartItem();
-				BeanUtils.copyProperties(cartItemDto, cartItem);
-				cartItem.setProduct(product);
-				cartItem.setCart(cart);
-				cartItemService.save(cartItem);
-				return new ResponseEntity<>(cartItem, HttpStatus.OK);
-			} else {
-				CartItem cartItem = cartItemService.findOneByCartAndProduct(cart, product).get();
-				BeanUtils.copyProperties(cartItemDto, cartItem);
-				cartItem.setProduct(product);
-				cartItem.setCart(cart);
-				cartItem.setQuantity(cartItemDto.getQuantity());
-				cartItemService.save(cartItem);
-				return new ResponseEntity<>(cartItem, HttpStatus.OK);
+			if (!cartItemOptional.isEmpty()) {
+				cartItem = cartItemOptional.get();
+
 			}
+			if (product.getDiscount() != null && product.getDiscount().getStatus() != 0) {
+				Date date = new Date();
+				if (date.before(product.getDiscount().getEndDate())
+						&& date.after(product.getDiscount().getStartDate())) {
+					if (product.getDiscount().getDiscountType() == DiscountType.percent) {
+						cartItemDto.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
+								* cartItemDto.getQuantity() / 100);
+					} else {
+						cartItemDto.setPrice(product.getPrice() - product.getDiscount().getDiscountValue());
+					}
+				}
+			}
+			BeanUtils.copyProperties(cartItemDto, cartItem);
+			cartItemService.save(cartItem);
+			return new ResponseEntity<>(cartItem, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 		}
 	}
 
+	@PostMapping(value = "/update")
+	public ResponseEntity<?> updateCartItem(@Valid @RequestBody CartItemDto cartItemDto) {
+		Product product = productService.findById(cartItemDto.getProductId()).get();
+		Cart cart = cartService.findOneById(cartItemDto.getCartId()).get();
+		if (cart != null && product.isActive()) {
+			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
+			CartItem cartItem = new CartItem();
+			// check xem trong cartItem của người này đã có sản phẩm này chưa
+			if (!cartItemOptional.isEmpty()) {
+				cartItem = cartItemOptional.get();
+
+			}
+			if (product.getDiscount() != null) {
+				if (product.getDiscount().getStatus() != 0) {
+					cartItemDto.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
+							* cartItemDto.getQuantity() / 100);
+				}
+			}
+			BeanUtils.copyProperties(cartItemDto, cartItem);
+			cartItemService.save(cartItem);
+			return new ResponseEntity<>(cartItem, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+		}
+	}
 }
