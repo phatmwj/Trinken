@@ -147,4 +147,93 @@ public class ProductApi {
 
 	}
 
+	@GetMapping(value = "get-product-by-category/active={active}/cateid={id}/sort={sort}")
+	public ResponseEntity<?> getProductByCategoryAndOrderByPrice(@PathVariable("active") Boolean active,
+			@PathVariable("id") Integer category_id, @PathVariable("sort") int sort) {
+		List<Product> products = new ArrayList<>();
+		if (active) {
+			switch (sort) {
+			// sort by price asc
+			case 0:
+				products = productService.findAllProductByCategoryAndActiveOrderByPriceAsc(1, category_id);
+				break;
+			// sort by price desc
+			case 1:
+				products = productService.findAllProductByCategoryAndActiveOrderByPriceDesc(1, category_id);
+				break;
+			// sort by id asc
+			case 2:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByIdAsc(1, category_id);
+				break;
+			// sort by id desc
+			case 3:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByIdDesc(1, category_id);
+				break;
+
+			// sort by name asc
+			case 4:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductNameAsc(1, category_id);
+				break;
+			// sort by name desc
+			case 5:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductNameDesc(1, category_id);
+				break;
+			// sort by sold desc
+			case 6:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(1, category_id);
+				break;
+			// sort by sold desc
+			case 7:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductSoldDesc(1, category_id);
+				break;
+			default:
+				break;
+			}
+		} else {
+			switch (sort) {
+			// sort by price asc
+			case 0:
+				products = productService.findAllProductByCategoryAndActiveOrderByPriceAsc(0, category_id);
+				break;
+			// sort by price desc
+			case 1:
+				products = productService.findAllProductByCategoryAndActiveOrderByPriceDesc(0, category_id);
+				break;
+			// sort by id asc
+			case 2:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByIdAsc(0, category_id);
+				break;
+			// sort by id desc
+			case 3:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByIdDesc(0, category_id);
+				break;
+			// sort by name asc
+			case 4:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductNameAsc(0, category_id);
+				break;
+			// sort by name desc
+			case 5:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductNameDesc(0, category_id);
+				break;
+			// sort by sold desc
+			case 6:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(0, category_id);
+				break;
+			// sort by sold desc
+			case 7:
+				products = productService.findAllProductByCategoryIdAndActiveOrderByProductSoldDesc(0, category_id);
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (products.size() > 0) {
+			return new ResponseEntity<>(products, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(rs.result(true, "There is no product"), HttpStatus.NO_CONTENT);
+		}
+
+	}
+
 }

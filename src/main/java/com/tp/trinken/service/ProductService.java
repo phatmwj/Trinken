@@ -21,4 +21,20 @@ public interface ProductService {
 
 	List<Product> getProductByCategoryAndActive(Integer active, Integer category_id);
 
+	List<Product> findAllProductByCategoryAndActiveOrderByPriceDesc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryAndActiveOrderByPriceAsc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByIdDesc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByIdAsc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByProductNameDesc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByProductNameAsc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByProductSoldDesc(Integer active, Integer category_id);
+
+	List<Product> findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(Integer active, Integer category_id);
+
 }
