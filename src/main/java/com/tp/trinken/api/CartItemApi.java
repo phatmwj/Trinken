@@ -63,26 +63,47 @@ public class CartItemApi {
 		if (cart != null && product.isActive()) {
 			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
 			CartItem cartItem = new CartItem();
-			cartItem.setCart(cart);
-			cartItem.setProduct(product);
+
 			// check xem trong cartItem của người này đã có sản phẩm này chưa
 			if (!cartItemOptional.isEmpty()) {
 				cartItem = cartItemOptional.get();
-
-			}
-			if (product.getDiscount() != null && product.getDiscount().getStatus() != 0) {
-				Date date = new Date();
-				if (date.before(product.getDiscount().getEndDate())
-						&& date.after(product.getDiscount().getStartDate())) {
-					if (product.getDiscount().getDiscountType() == DiscountType.percent) {
-						cartItemDto.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
-								* cartItemDto.getQuantity() / 100);
-					} else {
-						cartItemDto.setPrice(product.getPrice() - product.getDiscount().getDiscountValue());
+				cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
+				if (product.getDiscount() != null && product.getDiscount().getStatus() != 0) {
+					Date date = new Date();
+					if (date.before(product.getDiscount().getEndDate())
+							&& date.after(product.getDiscount().getStartDate())) {
+						if (product.getDiscount().getDiscountType() == DiscountType.percent) {
+							cartItem.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
+									* cartItem.getQuantity() / 100);
+						} else {
+							cartItem.setPrice((product.getPrice() - product.getDiscount().getDiscountValue())
+									* cartItem.getQuantity());
+						}
 					}
+
+				} else {
+					cartItem.setPrice(product.getPrice() * cartItem.getQuantity());
 				}
+			} else {
+				if (product.getDiscount() != null && product.getDiscount().getStatus() != 0) {
+					Date date = new Date();
+					if (date.before(product.getDiscount().getEndDate())
+							&& date.after(product.getDiscount().getStartDate())) {
+						if (product.getDiscount().getDiscountType() == DiscountType.percent) {
+							cartItemDto.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
+									* cartItemDto.getQuantity() / 100);
+						} else {
+							cartItemDto.setPrice((product.getPrice() - product.getDiscount().getDiscountValue())
+									* cartItemDto.getQuantity());
+						}
+					}
+
+				} else {
+					cartItemDto.setPrice(product.getPrice() * cartItemDto.getQuantity());
+				}
+				BeanUtils.copyProperties(cartItemDto, cartItem);
 			}
-			BeanUtils.copyProperties(cartItemDto, cartItem);
+
 			cartItemService.save(cartItem);
 			return new ResponseEntity<>(cartItem, HttpStatus.OK);
 		} else {
@@ -90,29 +111,4 @@ public class CartItemApi {
 		}
 	}
 
-	@PostMapping(value = "/update")
-	public ResponseEntity<?> updateCartItem(@Valid @RequestBody CartItemDto cartItemDto) {
-		Product product = productService.findById(cartItemDto.getProductId()).get();
-		Cart cart = cartService.findOneById(cartItemDto.getCartId()).get();
-		if (cart != null && product.isActive()) {
-			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
-			CartItem cartItem = new CartItem();
-			// check xem trong cartItem của người này đã có sản phẩm này chưa
-			if (!cartItemOptional.isEmpty()) {
-				cartItem = cartItemOptional.get();
-
-			}
-			if (product.getDiscount() != null) {
-				if (product.getDiscount().getStatus() != 0) {
-					cartItemDto.setPrice(product.getPrice() * (100 - product.getDiscount().getDiscountValue())
-							* cartItemDto.getQuantity() / 100);
-				}
-			}
-			BeanUtils.copyProperties(cartItemDto, cartItem);
-			cartItemService.save(cartItem);
-			return new ResponseEntity<>(cartItem, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-		}
-	}
 }
