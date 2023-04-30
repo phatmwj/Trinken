@@ -17,10 +17,13 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public List<Role> findAll() {
-		
+
 		return roleRepo.findAll();
 	}
-	
 
+	@Override
+	public <S extends Role> S save(S entity) {
+		return roleRepo.save(entity);
+	}
 
 }
