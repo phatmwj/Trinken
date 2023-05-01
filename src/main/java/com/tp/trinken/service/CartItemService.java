@@ -16,5 +16,7 @@ public interface CartItemService {
 	Optional<CartItem> findOneByCartAndProduct(Cart cart, Product product);
 
 	List<CartItem> findAllByCart(Cart cart);
+	
+	Optional<CartItem> findOneById(Integer id);
 
 }

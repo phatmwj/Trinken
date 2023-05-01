@@ -14,17 +14,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tp.trinken.dto.CartItemDto;
 import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.CartItem;
 import com.tp.trinken.entity.DiscountType;
+import com.tp.trinken.entity.OrderItem;
 import com.tp.trinken.entity.Product;
 import com.tp.trinken.service.CartItemService;
 import com.tp.trinken.service.CartService;
+import com.tp.trinken.service.OrderItemService;
 import com.tp.trinken.service.ProductService;
 import com.tp.trinken.service.UserService;
 import com.tp.trinken.utils.Result;
@@ -110,6 +114,13 @@ public class CartItemApi {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 		}
+	}
+	
+	@PutMapping(value = "/update-quantity/{id}")
+	public void UpdateQuantity(@PathVariable("id") Integer id,@RequestParam Integer count) {
+		CartItem cartItem = cartItemService.findOneById(id).get();
+		cartItem.setQuantity(count);
+		cartItemService.save(cartItem);
 	}
 
 }

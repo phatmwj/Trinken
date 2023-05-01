@@ -37,4 +37,10 @@ public class CartItemServiceImpl implements CartItemService {
 		return cartItemRepo.findAllByCart(cart);
 	}
 
+	@Override
+	public Optional<CartItem> findOneById(Integer id) {
+		
+		return cartItemRepo.findById(id);
+	}
+
 }
