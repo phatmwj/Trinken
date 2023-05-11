@@ -122,17 +122,12 @@ public class CartItemApi {
 		cartItemService.save(cartItem);
 	}
 
-	@DeleteMapping(value = "/delete")
-	public ResponseEntity<?> deleteCartItem(@Valid @RequestBody CartItemDto cartItemDto) {
-		Product product = productService.findById(cartItemDto.getProductId()).get();
-		Cart cart = cartService.findOneById(cartItemDto.getCartId()).get();
-		if (cart != null) {
-			Optional<CartItem> cartItemOptional = cartItemService.findOneByCartAndProduct(cart, product);
-			if (!cartItemOptional.isEmpty()) {
-				int cartItemId = cartItemOptional.get().getId();
-				cartItemService.deleteById(cartItemId);
-				return new ResponseEntity<>(rs.result(false, "Deleted successfully!"), HttpStatus.OK);
-			}
+	@DeleteMapping(value = "/delete/{cartItemId}")
+	public ResponseEntity<?> deleteCartItem(@PathVariable("cartItemId") Integer cartItemId) {
+		CartItem cartItem = cartItemService.findOneById(cartItemId).get();
+		if (cartItem != null) {
+			cartItemService.deleteById(cartItemId);
+			return new ResponseEntity<>(rs.result(false, "Deleted successfully!"), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(rs.result(false, "There is no!"), HttpStatus.NOT_IMPLEMENTED);
 	}
