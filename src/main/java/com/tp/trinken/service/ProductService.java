@@ -37,4 +37,6 @@ public interface ProductService {
 
 	List<Product> findAllProductByCategoryIdAndActiveOrderByProductSoldAsc(Integer active, Integer category_id);
 
+	Boolean existsById(int id);
+
 }

@@ -26,6 +26,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Boolean existsById(int id) {
+		return productRepo.existsById(id);
+	}
+
+	@Override
 	public Boolean checkExitsProductName(String ProductName) {
 
 		return productRepo.existsByProductName(ProductName);
