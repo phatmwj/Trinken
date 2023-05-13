@@ -1,8 +1,12 @@
 package com.tp.trinken.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +49,16 @@ public class BrandApi {
 			return new ResponseEntity<>(rs.result(true, "Brand is existed"), HttpStatus.CONFLICT);
 
 		return new ResponseEntity<>(rs.result(true, "Failed"), HttpStatus.NOT_IMPLEMENTED);
+
+	}
+
+	@GetMapping(value = "/get-all-active/active={active}")
+	public ResponseEntity<?> getAllActive(@PathVariable("active") Boolean active) {
+		List<Brand> brands = brandService.findAllByActive(active);
+		if (brands != null) {
+			return new ResponseEntity<>(brands, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(rs.result(true, "There is no brands"), HttpStatus.NO_CONTENT);
 
 	}
 

@@ -15,6 +15,8 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
 	List<Product> findByActive(boolean active);
 
+	Boolean existsById(int id);
+
 	@Query(value = "select p.* from products p inner join category_product c "
 			+ "on p.id = c.product_id where p.active = ?1 and c.category_id = ?2", nativeQuery = true)
 	List<Product> getProductByCategoryAndActive(Integer active, Integer category_id);
