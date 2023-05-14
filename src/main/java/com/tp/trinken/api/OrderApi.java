@@ -43,34 +43,33 @@ import com.tp.trinken.utils.Result;
 @RestController
 @RequestMapping(value = "/order")
 public class OrderApi {
-    
+
 	@Autowired
 	OrderService orderService;
-	
-	@Autowired 
+
+	@Autowired
 	OrderItemService orderItemService;
-	
+
 	@Autowired
 	CartService cartService;
-	
+
 	@Autowired
 	ShippingAddressService shippingAddressService;
-	
-	@Autowired 
+
+	@Autowired
 	PaymentMethodService paymentMethodService;
-	
+
 	@Autowired
 	CartItemService cartItemService;
-	
+
 	@Autowired
 	UserService userService;
-	
-	@Autowired 
+
+	@Autowired
 	OrderStatusService orderStatusService;
-	
-	Result result =  new Result();
-	
-	
+
+	Result result = new Result();
+
 	// user order from cart
 //	@PostMapping(value = "/add/{cartid}")
 //	public ResponseEntity<?> addOrder(@PathVariable("cartid") Integer cartId){
@@ -106,7 +105,8 @@ public class OrderApi {
 //	}
 	// user order from cart
 	@PostMapping(value = "/create/{cartid}")
-	public ResponseEntity<?> createOrder(@PathVariable("cartid") Integer cartId, @RequestParam Integer shippingId, @RequestParam Integer paymentId){
+	public ResponseEntity<?> createOrder(@PathVariable("cartid") Integer cartId, @RequestParam Integer shippingId,
+			@RequestParam Integer paymentId) {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setOrderStatus(orderStatusService.findOneById(1).get());
 		orderDto.setShippingAddress(shippingAddressService.findById(shippingId).get());
@@ -117,20 +117,20 @@ public class OrderApi {
 		orderDto.setCustomer(userService.findOneByCart(cart).get());
 		Order order = new Order();
 		List<CartItem> cartItems = cartItemService.findAllByCart(cart);
-		double totalAmount=0;
-		for(CartItem cartItem : cartItems) {
+		double totalAmount = 0;
+		for (CartItem cartItem : cartItems) {
 			OrderItem orderItem = new OrderItem();
 			orderItem.setProduct(cartItem.getProduct());
 			orderItem.setQuantity(cartItem.getQuantity());
 			orderItem.setPrice(cartItem.getPrice());
 			orderDto.getOrderItems().add(orderItem);
-			totalAmount = (Double) (totalAmount+ cartItem.getPrice()*cartItem.getQuantity());
+			totalAmount = (Double) (totalAmount + cartItem.getPrice() * cartItem.getQuantity());
 		}
 		orderDto.setOrderDate(Calendar.getInstance().getTime());
 		orderDto.setTotalAmount(totalAmount);
 		BeanUtils.copyProperties(orderDto, order);
 		List<OrderItem> orderItems1 = orderDto.getOrderItems();
-		for(OrderItem orderItem: orderItems1) {
+		for (OrderItem orderItem : orderItems1) {
 			orderItem.setOrder(order);
 		}
 		try {
@@ -141,12 +141,20 @@ public class OrderApi {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 		}
-		
+
 	}
-	
-	@GetMapping("/get/{userId}")
-	public ResponseEntity<List<Order>> listOrder(@PathVariable("userId") Integer userId, @RequestParam Integer statusId) {
-		List<Order> orders = orderService.findByCustomerAndOrderStatus(userService.findById(userId).get(), orderStatusService.findOneById(statusId).get());
+
+	@GetMapping("/get/{userId}/{statusId}")
+	public ResponseEntity<List<Order>> listOrder(@PathVariable("userId") Integer userId,
+			@PathVariable("statusId") Integer statusId) {
+		List<Order> orders = new ArrayList<>();
+		if (statusId == 0) {
+			orders =orderService.findByCustomer(userService.findById(userId).get());
+		} else {
+			orders = orderService.findByCustomerAndOrderStatus(userService.findById(userId).get(),
+					orderStatusService.findOneById(statusId).get());
+		}
+		
 		if (orders.isEmpty()) {
 			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
 		}
