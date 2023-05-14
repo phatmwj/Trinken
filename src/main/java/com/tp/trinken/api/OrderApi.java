@@ -57,6 +57,7 @@ public class OrderApi {
 
 	@Autowired
 	OrderStatusService orderStatusService;
+	
 
 	Result result = new Result();
 
@@ -125,7 +126,9 @@ public class OrderApi {
 		}
 		try {
 			orderService.save(order);
-
+			for(CartItem cartItem: cartItems) {
+				cartItemService.deleteById(cartItem.getId());
+			}
 			return new ResponseEntity<>(result.result(false, "Đặt hàng thành công"), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
