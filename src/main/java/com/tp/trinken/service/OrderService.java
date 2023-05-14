@@ -11,4 +11,6 @@ public interface OrderService {
 	<S extends Order> S save(S entity);
 	
 	List<Order> findByCustomerAndOrderStatus(User customer, OrderStatus orderStatus);
+	
+	List<Order> findByCustomer(User custommer);
 }

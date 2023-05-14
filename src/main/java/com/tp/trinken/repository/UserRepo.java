@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.User;
 
 @Repository
@@ -20,4 +21,6 @@ public interface UserRepo extends JpaRepository<User, Integer>{
     Boolean existsByUserName(String username);
     
     Optional<User> findOneByUserNameAndPassword(String username,String password);
+    
+    Optional<User>findOneByCart(Cart cart);
 }

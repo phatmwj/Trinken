@@ -3,6 +3,7 @@ package com.tp.trinken.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.User;
 
 public interface UserService {
@@ -22,4 +23,6 @@ public interface UserService {
 	Boolean checkEmail(String email);
 	
 	<S extends User> S save(S entity);
+	
+	Optional<User> findOneByCart(Cart cart);
 }

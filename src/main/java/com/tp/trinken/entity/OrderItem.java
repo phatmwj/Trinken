@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -54,7 +55,7 @@ public class OrderItem implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "order_id")
-	@JsonManagedReference
+	@JsonBackReference
 	private Order order;
 
 }

@@ -18,6 +18,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -69,15 +70,18 @@ public class Order implements Serializable {
 	@JsonManagedReference
 	private User customer;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "payment_method_id")
+	@JsonManagedReference
 	private PaymentMethod paymentmethod;
 	
 	@ManyToOne
 	@JoinColumn(name= "shipping_address_id")
+	@JsonManagedReference
 	private ShippingAddress shippingAddress;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<OrderItem> orderItems;
 	
 	@PrePersist
