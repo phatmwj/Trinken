@@ -28,4 +28,10 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepo.findByCustomerAndOrderStatus(customer, orderStatus);
 	}
 
+	@Override
+	public List<Order> findByCustomer(User custommer) {
+		// TODO Auto-generated method stub
+		return orderRepo.findByCustomer(custommer);
+	}
+
 }
