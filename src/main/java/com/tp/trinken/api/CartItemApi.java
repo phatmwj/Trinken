@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +25,9 @@ import com.tp.trinken.dto.CartItemDto;
 import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.CartItem;
 import com.tp.trinken.entity.DiscountType;
-import com.tp.trinken.entity.OrderItem;
 import com.tp.trinken.entity.Product;
 import com.tp.trinken.service.CartItemService;
 import com.tp.trinken.service.CartService;
-import com.tp.trinken.service.OrderItemService;
 import com.tp.trinken.service.ProductService;
 import com.tp.trinken.service.UserService;
 import com.tp.trinken.utils.Result;
@@ -45,7 +44,7 @@ public class CartItemApi {
 	@Autowired
 	ProductService productService;
 
-	Result rs;
+	Result rs = new Result();
 
 	@GetMapping(value = "/get-all/{id}")
 	public ResponseEntity<?> getAllByCart(@Valid @PathVariable Integer id) {
@@ -115,12 +114,22 @@ public class CartItemApi {
 			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 		}
 	}
-	
+
 	@PutMapping(value = "/update-quantity/{id}")
-	public void UpdateQuantity(@PathVariable("id") Integer id,@RequestParam Integer count) {
+	public void UpdateQuantity(@PathVariable("id") Integer id, @RequestParam Integer count) {
 		CartItem cartItem = cartItemService.findOneById(id).get();
 		cartItem.setQuantity(count);
 		cartItemService.save(cartItem);
+	}
+
+	@DeleteMapping(value = "/delete/{cartItemId}")
+	public ResponseEntity<?> deleteCartItem(@PathVariable("cartItemId") Integer cartItemId) {
+		CartItem cartItem = cartItemService.findOneById(cartItemId).get();
+		if (cartItem != null) {
+			cartItemService.deleteById(cartItemId);
+			return new ResponseEntity<>(rs.result(false, "Deleted successfully!"), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(rs.result(false, "There is no!"), HttpStatus.NOT_IMPLEMENTED);
 	}
 
 }

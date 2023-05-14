@@ -1,5 +1,7 @@
 package com.tp.trinken.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Boolean checkExistsByBrandName(String name) {
-		
+
 		return brandRepo.existsByBrandName(name);
 	}
 
@@ -25,8 +27,13 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Brand findById(Integer id) {
-		
+
 		return brandRepo.findById(id).get();
+	}
+
+	@Override
+	public List<Brand> findAllByActive(boolean active) {
+		return brandRepo.findAllByActive(active);
 	}
 
 }

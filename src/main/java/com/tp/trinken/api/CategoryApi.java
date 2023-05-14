@@ -107,4 +107,15 @@ public class CategoryApi {
 
 	}
 
+	@GetMapping(value = "/get-all-active")
+	public ResponseEntity<List<Category>> getAllActiveCategory() {
+		List<Category> categories = new ArrayList<>();
+		categories = categoryService.findByActive(true);
+		if (categories.size() > 0) {
+			return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
+		}
+	}
+
 }

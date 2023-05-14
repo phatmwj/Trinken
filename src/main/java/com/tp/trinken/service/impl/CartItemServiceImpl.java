@@ -39,8 +39,13 @@ public class CartItemServiceImpl implements CartItemService {
 
 	@Override
 	public Optional<CartItem> findOneById(Integer id) {
-		
+
 		return cartItemRepo.findById(id);
+	}
+
+	@Override
+	public void deleteById(int id) {
+		cartItemRepo.deleteById(id);
 	}
 
 }
