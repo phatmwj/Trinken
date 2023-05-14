@@ -1,13 +1,17 @@
 package com.tp.trinken.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,5 +37,9 @@ public class PaymentMethod implements Serializable{
 	
 	@Column(name="payment_method_name",unique = true)
 	private String paymentMethodName;
+	
+	@OneToMany(mappedBy = "paymentmethod")
+	@JsonBackReference
+	private List<Order> orders;
 
 }

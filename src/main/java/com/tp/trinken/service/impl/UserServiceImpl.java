@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.User;
 import com.tp.trinken.repository.UserRepo;
 import com.tp.trinken.service.UserService;
@@ -62,6 +63,12 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> findById(Integer id) {
 		
 		return userRepo.findById(id);
+	}
+
+	@Override
+	public Optional<User> findOneByCart(Cart cart) {
+		
+		return userRepo.findOneByCart(cart);
 	}
 
 }
