@@ -13,7 +13,7 @@ import com.tp.trinken.service.OrderService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	
+
 	@Autowired
 	OrderRepo orderRepo;
 
@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> findByCustomerAndOrderStatus(User customer, OrderStatus orderStatus) {
-		
+
 		return orderRepo.findByCustomerAndOrderStatus(customer, orderStatus);
 	}
 
@@ -32,6 +32,21 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> findByCustomer(User custommer) {
 		// TODO Auto-generated method stub
 		return orderRepo.findByCustomer(custommer);
+	}
+
+	@Override
+	public List<Order> findByOrderStatus(OrderStatus orderStatus) {
+		return orderRepo.findByOrderStatus(orderStatus);
+	}
+
+	@Override
+	public List<Order> findAll() {
+		return orderRepo.findAll();
+	}
+
+	@Override
+	public boolean existsById(Integer id) {
+		return orderRepo.existsById(id);
 	}
 
 }

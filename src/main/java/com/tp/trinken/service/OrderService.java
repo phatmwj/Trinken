@@ -13,4 +13,10 @@ public interface OrderService {
 	List<Order> findByCustomerAndOrderStatus(User customer, OrderStatus orderStatus);
 	
 	List<Order> findByCustomer(User custommer);
+
+	List<Order> findByOrderStatus(OrderStatus orderStatus);
+
+	List<Order> findAll();
+
+	boolean existsById(Integer id);
 }

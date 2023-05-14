@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.tp.trinken.entity.OrderStatus;
 
 @Repository
-public interface OrderStatusRepo extends JpaRepository<OrderStatus, Integer>{
-
+public interface OrderStatusRepo extends JpaRepository<OrderStatus, Integer> {
 }
