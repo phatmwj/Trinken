@@ -6,6 +6,7 @@ import java.util.Map;
 import com.tp.trinken.entity.Brand;
 import com.tp.trinken.entity.Category;
 import com.tp.trinken.entity.Product;
+import com.tp.trinken.entity.ShippingAddress;
 import com.tp.trinken.entity.User;
 
 public class Result {
@@ -46,6 +47,14 @@ public class Result {
 		map.put("error", error);
 		map.put("message", message);
 		map.put("brand", brand);
+		return map;
+	}
+	
+	public Map<String, Object> resultShippingAddress(boolean error, String message, ShippingAddress shippingAddress) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("error", error);
+		map.put("message", message);
+		map.put("shippingAddress", shippingAddress);
 		return map;
 	}
 

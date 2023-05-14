@@ -1,6 +1,7 @@
 package com.tp.trinken.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
 	public void deleteById(Integer id) {
 		shippingAddressRepo.deleteById(id);;
 		
+	}
+
+	@Override
+	public Optional<ShippingAddress> findById(Integer id) {
+		// TODO Auto-generated method stub
+		return shippingAddressRepo.findById(id);
 	}
 	
 }
