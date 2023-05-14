@@ -142,7 +142,7 @@ public class CartItemApi {
 
 	@DeleteMapping(value = "/delete/{cartItemId}")
 	public ResponseEntity<?> deleteCartItem(@PathVariable("cartItemId") Integer cartItemId) {
-		CartItem cartItem = cartItemService.findOneById(cartItemId).get();
+		Optional<CartItem> cartItem = cartItemService.findOneById(cartItemId);
 		if (cartItem != null) {
 			cartItemService.deleteById(cartItemId);
 			return new ResponseEntity<>(rs.result(false, "Deleted successfully!"), HttpStatus.OK);
