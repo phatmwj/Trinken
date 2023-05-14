@@ -119,6 +119,24 @@ public class CartItemApi {
 	public void UpdateQuantity(@PathVariable("id") Integer id, @RequestParam Integer count) {
 		CartItem cartItem = cartItemService.findOneById(id).get();
 		cartItem.setQuantity(count);
+		if (cartItem.getProduct().getDiscount() != null && cartItem.getProduct().getDiscount().getStatus() != 0) {
+			Date date = new Date();
+			if (date.before(cartItem.getProduct().getDiscount().getEndDate())
+					&& date.after(cartItem.getProduct().getDiscount().getStartDate())) {
+				if (cartItem.getProduct().getDiscount().getDiscountType() == DiscountType.percent) {
+					cartItem.setPrice(cartItem.getProduct().getPrice()
+							* (100 - cartItem.getProduct().getDiscount().getDiscountValue()) * cartItem.getQuantity()
+							/ 100);
+				} else {
+					cartItem.setPrice(
+							(cartItem.getProduct().getPrice() - cartItem.getProduct().getDiscount().getDiscountValue())
+									* cartItem.getQuantity());
+				}
+			}
+		} else {
+			cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+		}
+
 		cartItemService.save(cartItem);
 	}
 
