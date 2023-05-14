@@ -1,13 +1,8 @@
 package com.tp.trinken.api;
 
-import java.io.Console;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tp.trinken.dto.ProfileDto;
 import com.tp.trinken.dto.SignUpDto;
-import com.tp.trinken.dto.UserDto;
 import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.User;
 import com.tp.trinken.service.CloudinaryService;
 import com.tp.trinken.service.EmailService;
+import com.tp.trinken.service.RoleService;
 import com.tp.trinken.service.UserService;
 import com.tp.trinken.utils.Result;
 
@@ -51,6 +46,9 @@ public class UserApi {
 
 	@Autowired
 	EmailService emailService;
+
+	@Autowired
+	RoleService roleService;
 
 	Result rs = new Result();
 
@@ -77,6 +75,7 @@ public class UserApi {
 				BeanUtils.copyProperties(signUpDto, user);
 				Cart cart = new Cart();
 				user.setCart(cart);
+				user.setRole(roleService.findById(2).get());
 				userService.save(user);
 				return new ResponseEntity<>(rs.resultUser(false, "Đăng kí thành công", user), HttpStatus.OK);
 			} catch (Exception e) {
@@ -100,24 +99,24 @@ public class UserApi {
 					HttpStatus.OK);
 		}
 	}
-	
+
 	@PutMapping(value = "/logout/userid={id}")
-	public void logoutUser(@PathVariable("id") Integer id ){
+	public void logoutUser(@PathVariable("id") Integer id) {
 		User user = userService.findById(id).get();
 		user.setLastLogin(Calendar.getInstance().getTime());
 		userService.save(user);
 //		return new ResponseEntity<>(HttpStatus.OK);
-		
+
 	}
-	
+
 	// update profile
 	@PutMapping(value = "/profile/{id}")
 	public ResponseEntity<?> updateProfile(@PathVariable Integer id, @Valid @ModelAttribute ProfileDto profileDto) {
 		User user = userService.findById(id).get();
-		if(profileDto.getUserName()== null && !userService.checkUsername(profileDto.getUserName())) {
+		if (profileDto.getUserName() == null && !userService.checkUsername(profileDto.getUserName())) {
 			profileDto.setUserName(user.getUserName());
 		}
-		if(profileDto.getEmail()==null && !userService.checkEmail(profileDto.getEmail())){
+		if (profileDto.getEmail() == null && !userService.checkEmail(profileDto.getEmail())) {
 			profileDto.setEmail(user.getEmail());
 		}
 		if (profileDto.getImageFile() != null) {
@@ -126,7 +125,7 @@ public class UserApi {
 			}
 			user.setImage(cloudinaryService.upload(profileDto.getImageFile()));
 		}
-	
+
 		BeanUtils.copyProperties(profileDto, user);
 		try {
 			userService.save(user);
@@ -137,17 +136,17 @@ public class UserApi {
 		}
 
 	}
-	
+
 	@PutMapping(value = "/update/profile/userid={id}")
-	public ResponseEntity<?> updateUser(@RequestBody User user, @RequestParam MultipartFile imageFile){
-		if (imageFile!= null) {
-			if(user.getImage()!= null) {
+	public ResponseEntity<?> updateUser(@RequestBody User user, @RequestParam MultipartFile imageFile) {
+		if (imageFile != null) {
+			if (user.getImage() != null) {
 				cloudinaryService.delete(user.getImage());
 			}
 			user.setImage(cloudinaryService.upload(imageFile));
 		}
 		return new ResponseEntity<>(rs.resultUser(false, "Đã cập nhật thành công", user), HttpStatus.OK);
-		
+
 	}
 
 	// upload image

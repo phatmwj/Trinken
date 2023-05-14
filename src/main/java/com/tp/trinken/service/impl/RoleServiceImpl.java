@@ -1,6 +1,7 @@
 package com.tp.trinken.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public <S extends Role> S save(S entity) {
 		return roleRepo.save(entity);
+	}
+
+	@Override
+	public Optional<Role> findById(int id) {
+		return roleRepo.findById(id);
 	}
 
 }

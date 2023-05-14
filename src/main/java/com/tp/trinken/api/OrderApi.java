@@ -1,23 +1,16 @@
 package com.tp.trinken.api;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +20,6 @@ import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.CartItem;
 import com.tp.trinken.entity.Order;
 import com.tp.trinken.entity.OrderItem;
-import com.tp.trinken.entity.PaymentMethod;
-import com.tp.trinken.entity.Product;
-import com.tp.trinken.repository.UserRepo;
 import com.tp.trinken.service.CartItemService;
 import com.tp.trinken.service.CartService;
 import com.tp.trinken.service.OrderItemService;
@@ -124,7 +114,7 @@ public class OrderApi {
 			orderItem.setQuantity(cartItem.getQuantity());
 			orderItem.setPrice(cartItem.getPrice());
 			orderDto.getOrderItems().add(orderItem);
-			totalAmount = (Double) (totalAmount + cartItem.getPrice() * cartItem.getQuantity());
+			totalAmount = (Double) (totalAmount + cartItem.getPrice());
 		}
 		orderDto.setOrderDate(Calendar.getInstance().getTime());
 		orderDto.setTotalAmount(totalAmount);
@@ -149,15 +139,38 @@ public class OrderApi {
 			@PathVariable("statusId") Integer statusId) {
 		List<Order> orders = new ArrayList<>();
 		if (statusId == 0) {
-			orders =orderService.findByCustomer(userService.findById(userId).get());
+			orders = orderService.findByCustomer(userService.findById(userId).get());
 		} else {
 			orders = orderService.findByCustomerAndOrderStatus(userService.findById(userId).get(),
 					orderStatusService.findOneById(statusId).get());
 		}
-		
+
 		if (orders.isEmpty()) {
 			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/get-all-by-status/status={status}")
+	public ResponseEntity<?> getAllBySatus(@PathVariable("status") int status) {
+		List<Order> orders = new ArrayList<>();
+		if (status != 0) {
+			orders = orderService.findByOrderStatus(orderStatusService.findOneById(status).get());
+		}
+		if (orders.isEmpty()) {
+			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/get-all")
+	public ResponseEntity<?> getAllOrder() {
+		List<Order> orders = new ArrayList<>();
+		orders = orderService.findAll();
+		if (orders.isEmpty()) {
+			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+	}
+
 }

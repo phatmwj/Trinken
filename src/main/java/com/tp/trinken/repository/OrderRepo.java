@@ -11,9 +11,11 @@ import com.tp.trinken.entity.User;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Integer> {
-	
+
 	List<Order> findByCustomerAndOrderStatus(User customer, OrderStatus orderStatus);
-	
+
 	List<Order> findByCustomer(User customer);
+
+	List<Order> findByOrderStatus(OrderStatus orderStatus);
 
 }
