@@ -3,6 +3,7 @@ package com.tp.trinken.api;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,8 @@ import com.tp.trinken.entity.Cart;
 import com.tp.trinken.entity.CartItem;
 import com.tp.trinken.entity.Order;
 import com.tp.trinken.entity.OrderItem;
+import com.tp.trinken.entity.OrderStatus;
+import com.tp.trinken.entity.User;
 import com.tp.trinken.service.CartItemService;
 import com.tp.trinken.service.CartService;
 import com.tp.trinken.service.OrderItemService;
@@ -57,7 +61,6 @@ public class OrderApi {
 
 	@Autowired
 	OrderStatusService orderStatusService;
-	
 
 	Result result = new Result();
 
@@ -126,7 +129,7 @@ public class OrderApi {
 		}
 		try {
 			orderService.save(order);
-			for(CartItem cartItem: cartItems) {
+			for (CartItem cartItem : cartItems) {
 				cartItemService.deleteById(cartItem.getId());
 			}
 			return new ResponseEntity<>(result.result(false, "Đặt hàng thành công"), HttpStatus.OK);
@@ -159,11 +162,14 @@ public class OrderApi {
 		List<Order> orders = new ArrayList<>();
 		if (status != 0) {
 			orders = orderService.findByOrderStatus(orderStatusService.findOneById(status).get());
+		} else {
+			orders = orderService.findAll();
 		}
 		if (orders.isEmpty()) {
 			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+
 	}
 
 	@GetMapping(value = "/get-all")
@@ -174,6 +180,21 @@ public class OrderApi {
 			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/verify-order/userId={userId}/orderId={orderId}/orderStatus={orderStatus}")
+	public ResponseEntity<?> verifyOrder(@PathVariable("userId") Integer userId,
+			@PathVariable("orderId") Integer orderId, @PathVariable("orderStatus") Integer orderStatus) {
+		Optional<User> userOptional = userService.findById(userId);
+		Optional<Order> orderOptional = orderService.findById(orderId);
+		Optional<OrderStatus> orderStatusOptional = orderStatusService.findById(orderStatus);
+		if (userOptional.isPresent() && orderOptional.isPresent() && orderStatusOptional.isPresent()) {
+			Order order = orderOptional.get();
+			order.setOrderStatus(orderStatusOptional.get());
+			orderService.save(order);
+			return new ResponseEntity<>(result.result(false, "Successfully"), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(result.result(true, "Failed"), HttpStatus.NOT_FOUND);
 	}
 
 }
