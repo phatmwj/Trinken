@@ -1,6 +1,7 @@
 package com.tp.trinken.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tp.trinken.entity.Order;
 import com.tp.trinken.entity.OrderStatus;
@@ -19,4 +20,6 @@ public interface OrderService {
 	List<Order> findAll();
 
 	boolean existsById(Integer id);
+
+	Optional<Order> findById(Integer id);
 }
